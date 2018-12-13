@@ -38,7 +38,7 @@ global.MOVIES = [
         language: 'Anglais',
         director: {
             name: "Christopher Nolan",
-            nationality: "Canadien",
+            nationality: "Britannique",
             birthdate: "1970-07-30"
         },
         genre: 'Science-fiction'
