@@ -1,7 +1,7 @@
 <template>
 <div>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
-    <a class="navbar-brand" href="#">{{ title }}</a>
+    <router-link :to="{ name: 'home' }" class="navbar-brand">{{ title }}</router-link>
   </nav>
   <main>
     <router-view></router-view>

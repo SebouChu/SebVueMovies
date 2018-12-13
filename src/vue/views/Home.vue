@@ -3,7 +3,25 @@
   <h1>Liste des films</h1>
 
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#movieModal">Ajouter un film</button>
-  <movie-modal v-bind:title="'Nouveau film'" v-bind:button="'Créer'" v-bind:movie="newMovie"></movie-modal>
+  <div class="modal fade bd-example-modal-lg" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="movieModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="movieModalLabel">Nouveau film</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <movie-form v-bind:movie="newMovie"></movie-form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-primary">Ajouter</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="row mt-4">
     <div class="col-md-4" v-for="(movie, index) in movies">

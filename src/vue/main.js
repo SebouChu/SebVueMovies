@@ -4,7 +4,7 @@ import App from './App.vue';
 import router from './routes.js'
 
 import MovieCardComponent from './components/movie-card.vue'
-import MovieModalComponent from './components/movie-modal.vue'
+import MovieFormComponent from './components/movie-form.vue'
 
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,7 +14,7 @@ const axios = require('axios');
 Vue.use(Vuex);
 
 Vue.component('movie-card', MovieCardComponent);
-Vue.component('movie-modal', MovieModalComponent);
+Vue.component('movie-form', MovieFormComponent);
 
 var myStore = new Vuex.Store({
     state: {
