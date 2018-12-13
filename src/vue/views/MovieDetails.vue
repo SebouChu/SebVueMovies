@@ -35,15 +35,13 @@
         </ul>
       </div>
     </div>
+    <button type="button" class="btn btn-link" v-on:click="$router.push({ name: 'home' })">Retour</button>
   </div>
 </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {}
-  },
   computed: {
     id() {
       return parseInt(this.$route.params.id);
