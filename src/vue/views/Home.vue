@@ -1,9 +1,18 @@
 <template>
 <div class="container">
-  <h1>{{ message }}</h1>
+  <h1>Liste des films</h1>
+
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#movieModal">Ajouter un film</button>
+  <movie-modal v-bind:title="'Nouveau film'" v-bind:button="'Créer'" v-bind:movie="newMovie"></movie-modal>
 
   <p v-if="loadingState">Loading...</p>
-  <div v-if="!loadingState">C'est bon !</div>
+  <div v-if="!loadingState">
+    <div class="row mt-4">
+      <div class="col-md-4" v-for="(movie, index) in movies">
+        <movie-card v-bind:movie="movie"></movie-card>
+      </div>
+    </div>
+  </div>
 </div>
 </template>
 
@@ -11,12 +20,26 @@
 export default {
   data() {
     return {
-      message: 'Welcome.'
+      newMovie: {
+        title: '',
+        year: 2018,
+        language: '',
+        director: {
+            name: '',
+            nationality: '',
+            birthdate: ''
+        },
+        genre: ''
+      }
     }
   },
   computed: {
     loadingState() {
       return this.$store.state.loadingState;
+    },
+
+    movies() {
+      return this.$store.state.movies;
     }
   }
 }

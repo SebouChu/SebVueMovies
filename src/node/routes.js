@@ -2,7 +2,7 @@ var express = require('express');
 var apiRoutes = express.Router();
 
 apiRoutes.route('/movies').get(function (req, res, next) {
-    res.json({ action: 'movies' });
+    res.json(MOVIES);
 });
 
 apiRoutes.route('/movies').post(function (req, res) {
