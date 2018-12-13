@@ -1,0 +1,19 @@
+{
+  "name": "seb-vue-movies",
+  "version": "1.0.0",
+  "description": "Application Node.JS + VueJS à base de films",
+  "main": "node/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/SebouChu/SebVueMovies.git"
+  },
+  "author": "Sébastien Gaya <sebastien.gaya@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SebouChu/SebVueMovies/issues"
+  },
+  "homepage": "https://github.com/SebouChu/SebVueMovies#readme"
+}
