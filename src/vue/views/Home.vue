@@ -17,14 +17,14 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Ajouter</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click="createMovie()">Ajouter</button>
         </div>
       </div>
     </div>
   </div>
 
   <div class="row mt-4">
-    <div class="col-md-4" v-for="(movie, index) in movies">
+    <div class="col-md-4 mb-4" v-for="(movie, index) in movies">
       <movie-card v-bind:movie="movie"></movie-card>
     </div>
   </div>
@@ -48,11 +48,31 @@ export default {
       }
     }
   },
-  computed: {
-    loadingState() {
-      return this.$store.state.loadingState;
+  methods: {
+    resetNewMovie() {
+      this.newMovie = {
+        id: undefined,
+        title: '',
+        year: null,
+        language: '',
+        director: {
+            name: '',
+            nationality: '',
+            birthdate: ''
+        },
+        genre: ''
+      };
     },
 
+    createMovie() {
+      this.$store.dispatch('addMovieToAPI', this.newMovie).then(id => {
+        console.log(id);
+        this.resetNewMovie();
+        this.$router.push({ name: 'movie', params: { id: id } })
+      });
+    }
+  },
+  computed: {
     movies() {
       return this.$store.state.movies;
     }

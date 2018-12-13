@@ -6,7 +6,22 @@ apiRoutes.route('/movies').get(function (req, res, next) {
 });
 
 apiRoutes.route('/movies').post(function (req, res) {
-    res.json({ action: 'new_movie' });
+    var newMovie = {
+        id: MOVIES[MOVIES.length - 1].id + 1,
+        title: `${req.body.title}`,
+        year: parseInt(req.body.year),
+        language: `${req.body.language}`,
+        director: {
+            name: `${req.body.director.name}`,
+            nationality: `${req.body.director.nationality}`,
+            birthdate: `${req.body.director.birthdate}`
+        },
+        genre: `${req.body.genre}`,
+    };
+
+    MOVIES.push(newMovie)
+
+    res.json({ id: newMovie.id });
 });
 
 apiRoutes.route('/movies/:id').get(function (req, res, next) {

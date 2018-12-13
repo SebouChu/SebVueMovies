@@ -30,18 +30,28 @@ var myStore = new Vuex.Store({
         }
     },
     actions: {
-        getMoviesFromApi(context) {
+        getMoviesFromAPI(context) {
             axios.get('/api/movies').then(function (response) {
                 context.commit('updateMovies', response.data);
             })
         },
 
-        addMovieToApi(context, movie) {
-            axios.post('/api/movies', movie).then(function (response) {
-                if (response.status == 200) {
-                    movie.id = response.data.id;
-                    context.commit('addMovie', movie);
-                }
+        addMovieToAPI(context, movie) {
+            return new Promise((resolve, reject) => {
+                axios.post('/api/movies', movie)
+                    .then(response => {
+                        if (response.status == 200) {
+                            movie.id = response.data.id;
+                            console.log(movie.id)
+                            context.commit('addMovie', movie);
+                            resolve(movie.id);
+                        } else {
+                            reject();
+                        }
+                    })
+                    .catch(() => {
+                        reject();
+                    })
             })
         }
     }
@@ -53,6 +63,6 @@ const app = new Vue({
     store: myStore,
     render: h => h(App),
     mounted() {
-        this.$store.dispatch('getMoviesFromApi')
+        this.$store.dispatch('getMoviesFromAPI')
     }
 });
