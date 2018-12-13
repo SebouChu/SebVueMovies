@@ -5,12 +5,9 @@
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#movieModal">Ajouter un film</button>
   <movie-modal v-bind:title="'Nouveau film'" v-bind:button="'Créer'" v-bind:movie="newMovie"></movie-modal>
 
-  <p v-if="loadingState">Loading...</p>
-  <div v-if="!loadingState">
-    <div class="row mt-4">
-      <div class="col-md-4" v-for="(movie, index) in movies">
-        <movie-card v-bind:movie="movie"></movie-card>
-      </div>
+  <div class="row mt-4">
+    <div class="col-md-4" v-for="(movie, index) in movies">
+      <movie-card v-bind:movie="movie"></movie-card>
     </div>
   </div>
 </div>
@@ -22,7 +19,7 @@ export default {
     return {
       newMovie: {
         title: '',
-        year: 2018,
+        year: null,
         language: '',
         director: {
             name: '',

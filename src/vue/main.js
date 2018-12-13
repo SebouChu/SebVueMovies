@@ -18,12 +18,11 @@ Vue.component('movie-modal', MovieModalComponent);
 
 var myStore = new Vuex.Store({
     state: {
-        movies: [],
-        loadingState: false
+        movies: []
     },
     mutations: {
-        setLoadingState(state, loadingState) {
-            state.loadingState = loadingState;
+        addMovie(state, movie) {
+            state.movies.push(movie);
         },
 
         updateMovies(state, movies) {
@@ -32,11 +31,17 @@ var myStore = new Vuex.Store({
     },
     actions: {
         getMoviesFromApi(context) {
-            context.commit('setLoadingState', true);
-
             axios.get('/api/movies').then(function (response) {
                 context.commit('updateMovies', response.data);
-                context.commit('setLoadingState', false);
+            })
+        },
+
+        addMovieToApi(context, movie) {
+            axios.post('/api/movies', movie).then(function (response) {
+                if (response.status == 200) {
+                    movie.id = response.data.id;
+                    context.commit('addMovie', movie);
+                }
             })
         }
     }

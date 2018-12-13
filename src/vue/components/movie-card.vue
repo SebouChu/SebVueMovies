@@ -4,7 +4,9 @@
   <div class="card-body">
     <h5 class="card-title text-primary">{{ movie.title }} ({{ movie.year }})</h5>
     <p class="card-text">Réalisé par {{ movie.director.name }}</p>
-    <a href="#" class="card-link">Détails</a>
+  </div>
+  <div class="card-footer bg-white">
+    <a href="#" class="card-link">En savoir plus</a>
   </div>
 </div>
 </template>
