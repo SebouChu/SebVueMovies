@@ -1,20 +1,24 @@
 var express = require('express');
 var apiRoutes = express.Router();
 
-apiRoutes.route('/all').get(function (req, res, next) {
-    res.json({ action: 'all' });
+apiRoutes.route('/movies').get(function (req, res, next) {
+    res.json({ action: 'movies' });
 });
 
-apiRoutes.route('/add').post(function (req, res) {
-    res.json({ action: 'add' });
+apiRoutes.route('/movies').post(function (req, res) {
+    res.json({ action: 'new_movie' });
 });
 
-apiRoutes.route('/delete/:id').get(function (req, res, next) {
-    res.json({ action: 'delete' });
+apiRoutes.route('/movies/:id').get(function (req, res, next) {
+    res.json({ action: 'movie' });
 });
 
-apiRoutes.route('/update/:id').post(function (req, res, next) {
-    res.json({ action: 'update' });
+apiRoutes.route('/movies/:id').post(function (req, res, next) {
+    res.json({ action: 'update_movie' });
+});
+
+apiRoutes.route('/movies/:id/delete').get(function (req, res, next) {
+    res.json({ action: 'delete_movie' });
 });
 
 module.exports = apiRoutes;
