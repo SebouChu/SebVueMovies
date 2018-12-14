@@ -17,6 +17,7 @@ apiRoutes.route('/movies').post(function (req, res) {
             birthdate: `${req.body.director.birthdate}`
         },
         genre: `${req.body.genre}`,
+        rating: []
     };
 
     MOVIES.push(newMovie)
@@ -59,6 +60,18 @@ apiRoutes.route('/movies/:id/delete').get(function (req, res, next) {
         res.status(404).send({ error: 'Movie not found.' });
     } else {
         MOVIES.splice(movieIndex, 1);
+
+        res.status(204).send(null);
+    }
+});
+
+apiRoutes.route('/movies/:id/rate').post(function (req, res, next) {
+    var movie = MOVIES.find(movie => movie.id == req.params.id)
+
+    if (movie === null) {
+        res.status(404).send({ error: 'Movie not found.' });
+    } else {
+        movie.ratings.push(req.body.rating);
 
         res.status(204).send(null);
     }

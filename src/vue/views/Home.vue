@@ -44,7 +44,8 @@ export default {
             nationality: '',
             birthdate: ''
         },
-        genre: ''
+        genre: '',
+        rating: []
       }
     }
   },
@@ -60,7 +61,8 @@ export default {
             nationality: '',
             birthdate: ''
         },
-        genre: ''
+        genre: '',
+        rating: []
       };
     },
 

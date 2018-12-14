@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import App from './App.vue';
 import router from './routes.js'
 
+import VueStarRatingComponent from 'vue-star-rating';
 import MovieCardComponent from './components/movie-card.vue'
 import MovieFormComponent from './components/movie-form.vue'
 
@@ -15,18 +16,19 @@ Vue.use(Vuex);
 
 Vue.component('movie-card', MovieCardComponent);
 Vue.component('movie-form', MovieFormComponent);
+Vue.component('star-rating', VueStarRatingComponent);
 
 var myStore = new Vuex.Store({
     state: {
         movies: []
     },
     mutations: {
-        addMovie(state, movie) {
-            state.movies.push(movie);
-        },
-
         updateMovies(state, movies) {
             state.movies = movies;
+        },
+
+        addMovie(state, movie) {
+            state.movies.push(movie);
         },
 
         updateMovie(state, movie) {
@@ -40,6 +42,14 @@ var myStore = new Vuex.Store({
             var index = state.movies.findIndex(movie => movie.id == id);
             if (index !== -1) {
                 state.movies.splice(index, 1);
+            }
+        },
+
+        rateMovie(state, params) {
+            console.log(params.rating);
+            var index = state.movies.findIndex(movie => movie.id == params.id);
+            if (index !== -1) {
+                state.movies[index].ratings.push(params.rating);
             }
         }
     },
@@ -92,6 +102,24 @@ var myStore = new Vuex.Store({
                     .then(response => {
                         if (response.status == 204) {
                             context.commit('deleteMovie', id);
+                            resolve();
+                        } else {
+                            reject();
+                        }
+                    })
+                    .catch(() => {
+                        reject();
+                    })
+            })
+        },
+
+        rateMovieInAPI(context, params) {
+            return new Promise((resolve, reject) => {
+                axios.post(`/api/movies/${params.id}/rate`, { rating: params.rating })
+                    .then(response => {
+                        if (response.status == 204) {
+                            console.log(params.rating);
+                            context.commit('rateMovie', params);
                             resolve();
                         } else {
                             reject();

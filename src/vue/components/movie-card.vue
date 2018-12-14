@@ -5,15 +5,21 @@
     <h5 class="card-title text-primary">{{ movie.title }} ({{ movie.year }})</h5>
     <p class="card-text">Réalisé par {{ movie.director.name }}</p>
   </div>
-  <div class="card-footer bg-white">
-    <router-link :to="{ name: 'movie', params: { id: movie.id } }" class="card-link">En savoir plus</router-link>
+  <div class="card-footer bg-white d-flex align-items-center justify-content-between">
+    <small class="float-left text-muted">Note : {{ movieRate }} / 5 ({{ movie.ratings.length }} votes)</small>
+    <router-link :to="{ name: 'movie', params: { id: movie.id } }" class="float-right card-link">En savoir plus</router-link>
   </div>
 </div>
 </template>
 
 <script>
 export default {
-  props: ["movie"]
+  props: ["movie"],
+  computed: {
+    movieRate() {
+      return Math.round(this.movie.ratings.reduce((a, b) => a + b, 0) / this.movie.ratings.length * 10) / 10;
+    }
+  }
 }
 </script>
 <style>

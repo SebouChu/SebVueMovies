@@ -17,7 +17,8 @@ global.MOVIES = [
             nationality: "Britannique",
             birthdate: "1963-11-30"
         },
-        genre: 'Fantastique'
+        genre: 'Fantastique',
+        ratings: [4, 3, 3]
     },
     {
         id: 2,
@@ -29,7 +30,8 @@ global.MOVIES = [
             nationality: "Canadien",
             birthdate: "1954-08-16"
         },
-        genre: 'Historique'
+        genre: 'Historique',
+        ratings: [5, 4]
     },
     {
         id: 3,
@@ -41,7 +43,8 @@ global.MOVIES = [
             nationality: "Britannique",
             birthdate: "1970-07-30"
         },
-        genre: 'Science-fiction'
+        genre: 'Science-fiction',
+        ratings: [5, 5, 5, 5]
     }
 ];
 
