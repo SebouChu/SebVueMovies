@@ -66,7 +66,6 @@ export default {
 
     createMovie() {
       this.$store.dispatch('addMovieToAPI', this.newMovie).then(id => {
-        console.log(id);
         this.resetNewMovie();
         this.$router.push({ name: 'movie', params: { id: id } })
       });

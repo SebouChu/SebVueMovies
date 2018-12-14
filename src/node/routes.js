@@ -25,11 +25,31 @@ apiRoutes.route('/movies').post(function (req, res) {
 });
 
 apiRoutes.route('/movies/:id').get(function (req, res, next) {
-    res.json({ action: 'movie' });
+    var movie = MOVIES.find(movie => movie.id == req.params.id)
+
+    if (movie === null) {
+        res.status(404).send({ error: 'Movie not found.' });
+    } else {
+        res.json(movie);
+    }
 });
 
 apiRoutes.route('/movies/:id').post(function (req, res, next) {
-    res.json({ action: 'update_movie' });
+    var movie = MOVIES.find(movie => movie.id == req.params.id)
+
+    if (movie === null) {
+        res.status(404).send({ error: 'Movie not found.' });
+    } else {
+        movie.title = `${req.body.title}`;
+        movie.year = parseInt(req.body.year);
+        movie.language = `${req.body.language}`;
+        movie.director.name = `${req.body.director.name}`;
+        movie.director.nationality = `${req.body.director.nationality}`;
+        movie.director.birthdate = `${req.body.director.birthdate}`;
+        movie.genre = `${req.body.genre}`;
+
+        res.status(204).send(null);
+    }
 });
 
 apiRoutes.route('/movies/:id/delete').get(function (req, res, next) {

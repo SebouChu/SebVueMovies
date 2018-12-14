@@ -25,8 +25,9 @@ export default {
   },
   methods: {
     updateMovie() {
-      // Update
-      // retour sur le show
+      this.$store.dispatch('updateMovieInAPI', this.movie).then(() => {
+        this.$router.push({ name: 'movie', params: { id: this.movie.id } })
+      });
     }
   }
 }
