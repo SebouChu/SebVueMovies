@@ -2,11 +2,8 @@
 <div class="container">
   <h1>Modifier le film</h1>
 
-  <div>
-    <movie-form v-bind:movie="movie"></movie-form>
-    <button type="button" class="btn btn-primary">Enregistrer</button>
-  </div>
-
+  <movie-form v-bind:movie="movie"></movie-form>
+  <button type="button" class="btn btn-primary" v-on:click="updateMovie()">Enregistrer</button>
   <button type="button" class="btn btn-link" v-on:click="$router.push({ name: 'home' })">Retour</button>
 </div>
 </template>
@@ -24,6 +21,12 @@ export default {
 
     movie() {
       return this.movies.find(movie => movie.id == this.id)
+    }
+  },
+  methods: {
+    updateMovie() {
+      // Update
+      // retour sur le show
     }
   }
 }

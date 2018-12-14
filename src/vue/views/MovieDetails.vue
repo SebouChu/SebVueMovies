@@ -12,8 +12,8 @@
       <div class="col-md-9 mt-3 mb-3">
         <h3>{{ movie.title }}</h3>
         <div class="actions">
-          <button type="button" class="btn btn-warning">Modifier</button>
-          <button type="button" class="btn btn-danger">Supprimer</button>
+          <button type="button" class="btn btn-warning" v-on:click="$router.push({ name: 'edit_movie', params: { id: movie.id } })">Modifier</button>
+          <button type="button" class="btn btn-danger" v-on:click="deleteMovie(movie.id)">Supprimer</button>
         </div>
       </div>
     </div>
@@ -53,6 +53,15 @@ export default {
 
     movie() {
       return this.movies.find(movie => movie.id == this.id)
+    }
+  },
+
+  methods: {
+    deleteMovie(id) {
+      if (confirm("Voulez-vous vraiment supprimer ce film ?")) {
+        // Suppression
+        // Retour à la maison
+      }
     }
   }
 }
