@@ -59,8 +59,9 @@ export default {
   methods: {
     deleteMovie(id) {
       if (confirm("Voulez-vous vraiment supprimer ce film ?")) {
-        // Suppression
-        // Retour à la maison
+        this.$store.dispatch('deleteMovieInAPI', this.id).then(() => {
+          this.$router.push({ name: 'home' })
+        });
       }
     }
   }

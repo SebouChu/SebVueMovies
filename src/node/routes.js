@@ -53,7 +53,15 @@ apiRoutes.route('/movies/:id').post(function (req, res, next) {
 });
 
 apiRoutes.route('/movies/:id/delete').get(function (req, res, next) {
-    res.json({ action: 'delete_movie' });
+    var movieIndex = MOVIES.findIndex(movie => movie.id == req.params.id)
+
+    if (movieIndex === -1) {
+        res.status(404).send({ error: 'Movie not found.' });
+    } else {
+        MOVIES.splice(movieIndex, 1);
+
+        res.status(204).send(null);
+    }
 });
 
 module.exports = apiRoutes;

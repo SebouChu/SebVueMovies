@@ -31,7 +31,16 @@ var myStore = new Vuex.Store({
 
         updateMovie(state, movie) {
             var index = state.movies.findIndex(storedMovie => storedMovie.id == movie.id);
-            state.movies[index] = movie;
+            if (index !== -1) {
+                state.movies[index] = movie;
+            }
+        },
+
+        deleteMovie(state, id) {
+            var index = state.movies.findIndex(movie => movie.id == id);
+            if (index !== -1) {
+                state.movies.splice(index, 1);
+            }
         }
     },
     actions: {
@@ -66,6 +75,23 @@ var myStore = new Vuex.Store({
                     .then(response => {
                         if (response.status == 204) {
                             context.commit('updateMovie', movie);
+                            resolve();
+                        } else {
+                            reject();
+                        }
+                    })
+                    .catch(() => {
+                        reject();
+                    })
+            })
+        },
+
+        deleteMovieInAPI(context, id) {
+            return new Promise((resolve, reject) => {
+                axios.get(`/api/movies/${id}/delete`)
+                    .then(response => {
+                        if (response.status == 204) {
+                            context.commit('deleteMovie', id);
                             resolve();
                         } else {
                             reject();
