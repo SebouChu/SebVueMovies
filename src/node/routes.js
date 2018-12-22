@@ -17,7 +17,7 @@ apiRoutes.route('/movies').post(function (req, res) {
             birthdate: `${req.body.director.birthdate}`
         },
         genre: `${req.body.genre}`,
-        rating: []
+        ratings: []
     };
 
     MOVIES.push(newMovie)

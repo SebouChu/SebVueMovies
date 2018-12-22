@@ -45,12 +45,12 @@ export default {
             birthdate: ''
         },
         genre: '',
-        rating: []
+        ratings: []
       }
     }
   },
   methods: {
-    resetNewMovie() {
+    resetForm() {
       this.newMovie = {
         id: undefined,
         title: '',
@@ -62,13 +62,13 @@ export default {
             birthdate: ''
         },
         genre: '',
-        rating: []
+        ratings: []
       };
     },
 
     createMovie() {
       this.$store.dispatch('addMovieToAPI', this.newMovie).then(id => {
-        this.resetNewMovie();
+        this.resetForm();
         this.$router.push({ name: 'movie', params: { id: id } })
       });
     }

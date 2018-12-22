@@ -43,7 +43,7 @@
       </div>
     </div>
     <hr>
-    <div class="mb-4">
+    <div class="mb-4" v-if="!hasRated">
       <h5>Donnez votre note : </h5>
       <star-rating :show-rating="false" v-model="userRating" class="mt-3 mb-4"></star-rating>
       <button class="btn btn-primary" v-on:click="sendRating()">Noter</button>
@@ -57,7 +57,8 @@
 export default {
   data() {
     return {
-      userRating: 3
+      userRating: 3,
+      hasRated: false
     }
   },
   computed: {
@@ -70,27 +71,41 @@ export default {
     },
 
     movie() {
-      return this.movies.find(movie => movie.id == this.id)
+      return this.$store.state.movie;
     },
 
     movieRate() {
+      if (this.movie.ratings.length == 0) {
+        return 'Non noté';
+      }
+
       return Math.round(this.movie.ratings.reduce((a, b) => a + b, 0) / this.movie.ratings.length * 10) / 10;
     }
   },
-
+  created () {
+    this.fetchMovie();
+  },
+  watch: {
+    '$route': 'fetchMovie'
+  },
   methods: {
     deleteMovie(id) {
       if (confirm("Voulez-vous vraiment supprimer ce film ?")) {
         this.$store.dispatch('deleteMovieInAPI', this.id).then(() => {
-          this.$router.push({ name: 'home' })
+          this.$router.push({ name: 'home' });
         });
       }
     },
 
+    fetchMovie() {
+      this.$store.dispatch('getMovieFromAPI', this.$route.params.id);
+    },
+
     sendRating() {
-      console.log(this.userRating);
       this.$store.dispatch('rateMovieInAPI', { id: this.id, rating: this.userRating }).then(() => {
         // TODO: Success Alert
+        this.hasRated = true;
+        this.$store.dispatch('getMovieFromAPI', this.$route.params.id);
       }).catch(() => {
         // TODO: Error Alert
       });

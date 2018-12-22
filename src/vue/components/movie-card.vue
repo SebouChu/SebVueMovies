@@ -17,6 +17,9 @@ export default {
   props: ["movie"],
   computed: {
     movieRate() {
+      if (this.movie.ratings.length == 0) {
+        return 'Non noté';
+      }
       return Math.round(this.movie.ratings.reduce((a, b) => a + b, 0) / this.movie.ratings.length * 10) / 10;
     }
   }

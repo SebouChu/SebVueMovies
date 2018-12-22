@@ -20,11 +20,16 @@ Vue.component('star-rating', VueStarRatingComponent);
 
 var myStore = new Vuex.Store({
     state: {
-        movies: []
+        movies: [],
+        movie: null
     },
     mutations: {
         updateMovies(state, movies) {
             state.movies = movies;
+        },
+
+        updateSelectedMovie(state, movie) {
+            state.movie = movie;
         },
 
         addMovie(state, movie) {
@@ -46,7 +51,6 @@ var myStore = new Vuex.Store({
         },
 
         rateMovie(state, params) {
-            console.log(params.rating);
             var index = state.movies.findIndex(movie => movie.id == params.id);
             if (index !== -1) {
                 state.movies[index].ratings.push(params.rating);
@@ -57,6 +61,12 @@ var myStore = new Vuex.Store({
         getMoviesFromAPI(context) {
             axios.get('/api/movies').then(function (response) {
                 context.commit('updateMovies', response.data);
+            })
+        },
+
+        getMovieFromAPI(context, id) {
+            axios.get(`/api/movies/${id}`).then(function (response) {
+                context.commit('updateSelectedMovie', response.data);
             })
         },
 
@@ -118,7 +128,6 @@ var myStore = new Vuex.Store({
                 axios.post(`/api/movies/${params.id}/rate`, { rating: params.rating })
                     .then(response => {
                         if (response.status == 204) {
-                            console.log(params.rating);
                             context.commit('rateMovie', params);
                             resolve();
                         } else {
@@ -139,6 +148,6 @@ const app = new Vue({
     store: myStore,
     render: h => h(App),
     mounted() {
-        this.$store.dispatch('getMoviesFromAPI')
+        this.$store.dispatch('getMoviesFromAPI');
     }
 });
