@@ -24,7 +24,7 @@
   </div>
 
   <div class="row mt-4">
-    <div class="col-md-4 mb-4" v-for="(movie, index) in movies">
+    <div class="col-lg-4 col-md-6 mb-4" v-for="(movie, index) in movies">
       <movie-card v-bind:movie="movie"></movie-card>
     </div>
   </div>
@@ -44,8 +44,12 @@ export default {
             nationality: '',
             birthdate: ''
         },
+        poster: null,
         genre: '',
         ratings: []
+      },
+      newPoster: {
+        file: null
       }
     }
   },
@@ -61,9 +65,13 @@ export default {
             nationality: '',
             birthdate: ''
         },
+        poster: null,
         genre: '',
         ratings: []
       };
+      this.newPoster = {
+        file: null
+      }
     },
 
     createMovie() {

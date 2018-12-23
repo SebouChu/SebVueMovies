@@ -6,10 +6,10 @@
 
   <div v-if="movie" class="container">
     <div class="row align-items-center">
-      <div class="col-md-3 text-center">
-        <img src="https://via.placeholder.com/170x250" alt="Movie Poster">
+      <div class="col-lg-3 text-center">
+        <img :src="movie.poster" alt="Movie Poster">
       </div>
-      <div class="col-md-9 mt-3 mb-3">
+      <div class="col-lg-9 mt-3 mb-3">
         <h3>{{ movie.title }}</h3>
         <div class="actions">
           <button type="button" class="btn btn-warning" v-on:click="$router.push({ name: 'edit_movie', params: { id: movie.id } })">Modifier</button>
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="row mt-5">
-      <div class="col-md-4">
+      <div class="col-lg-4">
         <h5>Infos</h5>
         <ul>
           <li><strong>Année</strong> : {{ movie.year }}</li>
@@ -26,7 +26,7 @@
           <li><strong>Genre</strong> : {{ movie.genre }}</li>
         </ul>
       </div>
-      <div class="col-md-4">
+      <div class="col-lg-4">
         <h5>Réalisateur</h5>
         <ul>
           <li><strong>Nom</strong> : {{ movie.director.name }}</li>
@@ -34,7 +34,7 @@
           <li><strong>Date de naissance</strong> : {{ movie.director.birthdate }}</li>
         </ul>
       </div>
-      <div class="col-md-4">
+      <div class="col-lg-4">
         <h5>Note du film</h5>
         <p>
           {{ movieRate }} / 5

@@ -17,17 +17,17 @@
 
   <h6>Réalisateur</h6>
   <div class="form-row">
-    <div class="form-group col-md-4">
+    <div class="form-group col-lg-4">
       <label for="director_name">Nom</label>
       <input type="text" placeholder="ex: Christopher Nolan" class="form-control" id="director_name" v-model="movie.director.name">
     </div>
 
-    <div class="form-group col-md-4">
+    <div class="form-group col-lg-4">
       <label for="director_nationality">Nationalité</label>
       <input type="text" placeholder="ex: Britannique" class="form-control" id="director_nationality" v-model="movie.director.nationality">
     </div>
 
-    <div class="form-group col-md-4">
+    <div class="form-group col-lg-4">
       <label for="director_birthdate">Date de naissance</label>
       <input type="date" placeholder="ex: 1970-07-30" class="form-control" id="director_birthdate" v-model="movie.director.birthdate">
     </div>

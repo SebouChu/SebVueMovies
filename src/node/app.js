@@ -17,6 +17,7 @@ global.MOVIES = [
             nationality: "Britannique",
             birthdate: "1963-11-30"
         },
+        poster: 'https://via.placeholder.com/170x250',
         genre: 'Fantastique',
         ratings: [4, 3, 3]
     },
@@ -30,6 +31,7 @@ global.MOVIES = [
             nationality: "Canadien",
             birthdate: "1954-08-16"
         },
+        poster: 'https://via.placeholder.com/170x250',
         genre: 'Historique',
         ratings: [5, 4]
     },
@@ -43,6 +45,7 @@ global.MOVIES = [
             nationality: "Britannique",
             birthdate: "1970-07-30"
         },
+        poster: 'https://via.placeholder.com/170x250',
         genre: 'Science-fiction',
         ratings: [5, 5, 5, 5]
     }
