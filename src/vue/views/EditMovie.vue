@@ -34,10 +34,8 @@ export default {
   },
   methods: {
     updateMovie() {
-      var formData = new FormData();
-      formData.append('movie', JSON.stringify(this.movie));
-      formData.append('posterFile', this.newPoster.file);
-      this.$store.dispatch('updateMovieInAPI', formData).then(() => {
+      var params = { movie: this.movie, posterFile: this.newPoster.file };
+      this.$store.dispatch('updateMovieInAPI', params).then(() => {
         this.$router.push({ name: 'movie', params: { id: this.movie.id } })
       });
     }

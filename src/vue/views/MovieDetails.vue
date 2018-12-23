@@ -7,7 +7,7 @@
   <div v-if="movie" class="container">
     <div class="row align-items-center">
       <div class="col-lg-3 text-center">
-        <img :src="movie.poster" alt="Movie Poster">
+        <img :src="movie.poster" alt="Movie Poster" class="img-fluid">
       </div>
       <div class="col-lg-9 mt-3 mb-3">
         <h3>{{ movie.title }}</h3>

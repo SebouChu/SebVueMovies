@@ -75,10 +75,8 @@ export default {
     },
 
     createMovie() {
-      var formData = new FormData();
-      formData.append('movie', JSON.stringify(this.newMovie));
-      formData.append('posterFile', this.newPoster.file);
-      this.$store.dispatch('addMovieToAPI', formData).then(id => {
+      var params = { movie: this.newMovie, posterFile: this.newPoster.file };
+      this.$store.dispatch('addMovieToAPI', params).then(id => {
         this.resetForm();
         this.$router.push({ name: 'movie', params: { id: id } })
       });

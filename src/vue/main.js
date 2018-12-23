@@ -70,15 +70,17 @@ var myStore = new Vuex.Store({
             })
         },
 
-        addMovieToAPI(context, movie) {
+        addMovieToAPI(context, params) {
             return new Promise((resolve, reject) => {
-                axios.post('/api/movies', movie)
+                var formData = new FormData();
+                formData.append('movie', JSON.stringify(params.movie));
+                formData.append('posterFile', params.posterFile);
+
+                axios.post('/api/movies', formData)
                     .then(response => {
-                        if (response.status == 200) {
-                            movie.id = response.data.id;
-                            console.log(movie.id)
-                            context.commit('addMovie', movie);
-                            resolve(movie.id);
+                        if (response.status === 200) {
+                            context.commit('addMovie', response.data);
+                            resolve(response.data.id);
                         } else {
                             reject();
                         }
@@ -89,12 +91,16 @@ var myStore = new Vuex.Store({
             })
         },
 
-        updateMovieInAPI(context, movie) {
+        updateMovieInAPI(context, params) {
             return new Promise((resolve, reject) => {
-                axios.post(`/api/movies/${movie.id}`, movie)
+                var formData = new FormData();
+                formData.append('movie', JSON.stringify(params.movie));
+                formData.append('posterFile', params.posterFile);
+
+                axios.post(`/api/movies/${params.movie.id}`, formData)
                     .then(response => {
-                        if (response.status == 204) {
-                            context.commit('updateMovie', movie);
+                        if (response.status === 200) {
+                            context.commit('updateMovie', response.data);
                             resolve();
                         } else {
                             reject();
@@ -110,7 +116,7 @@ var myStore = new Vuex.Store({
             return new Promise((resolve, reject) => {
                 axios.get(`/api/movies/${id}/delete`)
                     .then(response => {
-                        if (response.status == 204) {
+                        if (response.status === 204) {
                             context.commit('deleteMovie', id);
                             resolve();
                         } else {
@@ -127,7 +133,7 @@ var myStore = new Vuex.Store({
             return new Promise((resolve, reject) => {
                 axios.post(`/api/movies/${params.id}/rate`, { rating: params.rating })
                     .then(response => {
-                        if (response.status == 204) {
+                        if (response.status === 204) {
                             context.commit('rateMovie', params);
                             resolve();
                         } else {

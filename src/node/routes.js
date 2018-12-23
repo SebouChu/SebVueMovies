@@ -44,7 +44,7 @@ apiRoutes.route('/movies').post(upload.single('posterFile'), function (req, res)
 
     MOVIES.push(newMovie);
 
-    res.json({ id: newMovie.id });
+    res.json(newMovie);
 });
 
 apiRoutes.route('/movies/:id').get(function (req, res, next) {
@@ -63,15 +63,23 @@ apiRoutes.route('/movies/:id').post(upload.single('posterFile'), function (req, 
     if (movie === null) {
         res.status(404).send({ error: 'Movie not found.' });
     } else {
-        movie.title = `${req.body.title}`;
-        movie.year = parseInt(req.body.year);
-        movie.language = `${req.body.language}`;
-        movie.director.name = `${req.body.director.name}`;
-        movie.director.nationality = `${req.body.director.nationality}`;
-        movie.director.birthdate = `${req.body.director.birthdate}`;
-        movie.genre = `${req.body.genre}`;
+        var updatedMovie = JSON.parse(req.body.movie);
 
-        res.status(204).send(null);
+        movie.title = `${updatedMovie.title}`;
+        movie.year = parseInt(updatedMovie.year);
+        movie.language = `${updatedMovie.language}`;
+        movie.director.name = `${updatedMovie.director.name}`;
+        movie.director.nationality = `${updatedMovie.director.nationality}`;
+        movie.director.birthdate = `${updatedMovie.director.birthdate}`;
+        movie.genre = `${updatedMovie.genre}`;
+
+        if (req.file !== undefined) {
+            movie.poster = `uploads/${req.file.filename}`;
+        }
+
+        console.log(movie);
+
+        res.json(movie);
     }
 });
 
