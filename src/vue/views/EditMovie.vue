@@ -3,7 +3,7 @@
   <h1>Modifier le film</h1>
 
   <div v-if="movie">
-    <movie-form v-bind:movie="movie"></movie-form>
+    <movie-form v-bind:movie="movie" v-bind:poster="newPoster"></movie-form>
     <button type="button" class="btn btn-primary" v-on:click="updateMovie()">Enregistrer</button>
     <button type="button" class="btn btn-link" v-on:click="$router.push({ name: 'movie', params: { id: movie.id } })">Retour</button>
   </div>
@@ -12,6 +12,13 @@
 
 <script>
 export default {
+  data() {
+    return {
+      newPoster: {
+        file: null
+      }
+    }
+  },
   computed: {
     id() {
       return parseInt(this.$route.params.id);
@@ -27,7 +34,10 @@ export default {
   },
   methods: {
     updateMovie() {
-      this.$store.dispatch('updateMovieInAPI', this.movie).then(() => {
+      var formData = new FormData();
+      formData.append('movie', JSON.stringify(this.movie));
+      formData.append('posterFile', this.newPoster.file);
+      this.$store.dispatch('updateMovieInAPI', formData).then(() => {
         this.$router.push({ name: 'movie', params: { id: this.movie.id } })
       });
     }

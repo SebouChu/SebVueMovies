@@ -1,26 +1,48 @@
 var express = require('express');
+var multer = require('multer');
+var crypto = require('crypto');
+var path = require('path');
+
 var apiRoutes = express.Router();
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './src/static/uploads/')
+    },
+    filename: function (req, file, cb) {
+        crypto.pseudoRandomBytes(16, function (err, raw) {
+            cb(null, raw.toString('hex') + path.extname(file.originalname));
+        });
+    }
+});
+
+var upload = multer({
+    storage: storage,
+    fileFilter: function (req, file, cb) {
+        var filetypes = /jpeg|jpg|png/;
+        var mimetype = filetypes.test(file.mimetype);
+        var extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+
+        cb("Error: File upload only supports the following filetypes - " + filetypes);
+    }
+});
 
 apiRoutes.route('/movies').get(function (req, res, next) {
     res.json(MOVIES);
 });
 
-apiRoutes.route('/movies').post(function (req, res) {
-    var newMovie = {
-        id: MOVIES[MOVIES.length - 1].id + 1,
-        title: `${req.body.title}`,
-        year: parseInt(req.body.year),
-        language: `${req.body.language}`,
-        director: {
-            name: `${req.body.director.name}`,
-            nationality: `${req.body.director.nationality}`,
-            birthdate: `${req.body.director.birthdate}`
-        },
-        genre: `${req.body.genre}`,
-        ratings: []
-    };
+apiRoutes.route('/movies').post(upload.single('posterFile'), function (req, res) {
+    var newMovie = JSON.parse(req.body.movie);
+    newMovie.id = MOVIES[MOVIES.length - 1].id + 1;
+    newMovie.year = parseInt(newMovie.year);
+    newMovie.poster = (req.file !== undefined) ? `uploads/${req.file.filename}`
+                                               : 'https://via.placeholder.com/170x250';
 
-    MOVIES.push(newMovie)
+    MOVIES.push(newMovie);
 
     res.json({ id: newMovie.id });
 });
@@ -35,7 +57,7 @@ apiRoutes.route('/movies/:id').get(function (req, res, next) {
     }
 });
 
-apiRoutes.route('/movies/:id').post(function (req, res, next) {
+apiRoutes.route('/movies/:id').post(upload.single('posterFile'), function (req, res, next) {
     var movie = MOVIES.find(movie => movie.id == req.params.id)
 
     if (movie === null) {

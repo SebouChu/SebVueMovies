@@ -13,7 +13,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <movie-form v-bind:movie="newMovie"></movie-form>
+          <movie-form v-bind:movie="newMovie" v-bind:poster="newPoster"></movie-form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
@@ -75,7 +75,10 @@ export default {
     },
 
     createMovie() {
-      this.$store.dispatch('addMovieToAPI', this.newMovie).then(id => {
+      var formData = new FormData();
+      formData.append('movie', JSON.stringify(this.newMovie));
+      formData.append('posterFile', this.newPoster.file);
+      this.$store.dispatch('addMovieToAPI', formData).then(id => {
         this.resetForm();
         this.$router.push({ name: 'movie', params: { id: id } })
       });

@@ -1,5 +1,5 @@
 <template>
-<form>
+<form enctype="multipart/form-data">
   <div class="form-group">
     <label for="title">Titre</label>
     <input type="text" placeholder="ex: Interstellar" class="form-control" id="title" v-model="movie.title">
@@ -33,6 +33,18 @@
     </div>
   </div>
 
+  <div class="form-row">
+    <div class="form-group col-lg-6">
+      <label for="poster">Poster</label>
+      <input type="file" class="form-control-file" id="poster" accept=".png, .jpg, .jpeg" v-on:change="processFile($event)">
+    </div>
+
+    <div class="form-group col-lg-6" v-if="movie.poster">
+      <p>Current :</p>
+      <img :src="movie.poster" alt="Current poster">
+    </div>
+  </div>
+
   <div class="form-group">
     <label for="genre">Genre</label>
     <input type="text" placeholder="ex: Science-fiction" class="form-control" id="genre" v-model="movie.genre">
@@ -42,6 +54,11 @@
 
 <script>
 export default {
-  props: ['movie']
+  props: ['movie', 'poster'],
+  methods: {
+    processFile($event) {
+      this.poster.file = $event.target.files[0];
+    }
+  }
 }
 </script>
