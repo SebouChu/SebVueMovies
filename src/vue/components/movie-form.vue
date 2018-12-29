@@ -1,5 +1,12 @@
 <template>
 <form enctype="multipart/form-data">
+  <div v-if="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>Erreur :</strong> {{ error }}
+  </div>
+
   <div class="form-group">
     <label for="title">Titre</label>
     <input type="text" placeholder="ex: Interstellar" class="form-control" id="title" v-model="movie.title">
@@ -36,12 +43,17 @@
   <div class="form-row">
     <div class="form-group col-lg-6">
       <label for="poster">Poster</label>
-      <input type="file" class="form-control-file" id="poster" accept=".png, .jpg, .jpeg" v-on:change="processFile($event)">
+      <input type="file" ref="posterInput" class="form-control-file" id="poster" accept=".png, .jpg, .jpeg" v-on:change="processFile($event)">
+      <button type="button" class="btn btn-sm btn-outline-primary d-block mt-2" v-on:click="searchPoster($event)" :disabled="searching">
+        <span v-if="searching" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Rechercher sur OMDb
+      </button>
+      <button type="button" class="btn btn-danger d-block mt-3" v-if="movie.poster" v-on:click="movie.poster = null">Delete</button>
     </div>
 
-    <div class="form-group col-lg-6" v-if="movie.poster">
+    <div class="form-group col-lg-6" v-if="movie.poster || preview">
       <p>Current :</p>
-      <img :src="movie.poster" alt="Current poster">
+      <img :src="movie.poster ||  preview" alt="Current poster" class="img-fluid">
     </div>
   </div>
 
@@ -55,9 +67,43 @@
 <script>
 export default {
   props: ['movie', 'poster'],
+  data() {
+    return {
+      error: null,
+      preview: null,
+      reader: new FileReader(),
+      searching: false
+    };
+  },
   methods: {
     processFile($event) {
+      this.movie.poster = null;
+
       this.poster.file = $event.target.files[0];
+      var self = this;
+      this.reader.onload = function (e) {
+        self.preview = e.target.result;
+      };
+
+      if (this.poster.file) {
+        this.reader.readAsDataURL(this.poster.file);
+      }
+    },
+
+    searchPoster() {
+      this.searching = true;
+      this.$store.dispatch('searchPosterInAPI', this.movie.title).then((response) => {
+        this.searching = false;
+        if (response.error !== undefined) {
+          this.error = response.error;
+        } else {
+          this.movie.poster = response.poster_url;
+
+          this.$refs.posterInput.value = "";
+          this.poster.file = null;
+          this.preview = null;
+        }
+      });
     }
   }
 }

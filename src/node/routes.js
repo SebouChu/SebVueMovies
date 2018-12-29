@@ -1,5 +1,6 @@
 var express = require('express');
 var multer = require('multer');
+var axios = require('axios');
 var crypto = require('crypto');
 var path = require('path');
 
@@ -39,11 +40,11 @@ apiRoutes.route('/movies').post(upload.single('posterFile'), function (req, res)
     var newMovie = JSON.parse(req.body.movie);
     newMovie.id = MOVIES[MOVIES.length - 1].id + 1;
     newMovie.year = parseInt(newMovie.year);
-    newMovie.poster = (req.file !== undefined) ? `uploads/${req.file.filename}`
-                                               : 'https://via.placeholder.com/170x250';
+    if (req.file !== undefined) {
+        newMovie.poster = `uploads/${req.file.filename}`;
+    }
 
     MOVIES.push(newMovie);
-
     res.json(newMovie);
 });
 
@@ -72,12 +73,11 @@ apiRoutes.route('/movies/:id').post(upload.single('posterFile'), function (req, 
         movie.director.nationality = `${updatedMovie.director.nationality}`;
         movie.director.birthdate = `${updatedMovie.director.birthdate}`;
         movie.genre = `${updatedMovie.genre}`;
+        movie.poster = updatedMovie.poster;
 
         if (req.file !== undefined) {
             movie.poster = `uploads/${req.file.filename}`;
         }
-
-        console.log(movie);
 
         res.json(movie);
     }
@@ -105,6 +105,20 @@ apiRoutes.route('/movies/:id/rate').post(function (req, res, next) {
 
         res.status(204).send(null);
     }
+});
+
+apiRoutes.route('/omdb').get(function (req, res, next) {
+    var movieTitle = req.query.title;
+    var paramTitle = movieTitle.replace(' ', '+');
+    axios.get(`https://www.omdbapi.com/?apikey=OMDB_API_KEY&t=${paramTitle}`)
+        .then(response => {
+            if (response.data['Poster'] !== undefined) {
+                res.status(200).send({ poster_url: response.data['Poster'] });
+            } else {
+                res.status(404).send({ error: 'Poster not found.' })
+            }
+        }
+    );
 });
 
 module.exports = apiRoutes;

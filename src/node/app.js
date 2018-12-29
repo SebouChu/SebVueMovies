@@ -9,7 +9,7 @@ var port = 8080;
 global.MOVIES = [
     {
         id: 1,
-        title: "Les Animaux fantastiques : Les Crimes de Grindelwald",
+        title: "Fantastic Beasts: The Crimes of Grindelwald",
         year: 2018,
         language: 'Anglais',
         director: {
@@ -17,7 +17,7 @@ global.MOVIES = [
             nationality: "Britannique",
             birthdate: "1963-11-30"
         },
-        poster: 'https://via.placeholder.com/170x250',
+        poster: null,
         genre: 'Fantastique',
         ratings: [4, 3, 3]
     },
@@ -31,7 +31,7 @@ global.MOVIES = [
             nationality: "Canadien",
             birthdate: "1954-08-16"
         },
-        poster: 'https://via.placeholder.com/170x250',
+        poster: null,
         genre: 'Historique',
         ratings: [5, 4]
     },
@@ -45,7 +45,7 @@ global.MOVIES = [
             nationality: "Britannique",
             birthdate: "1970-07-30"
         },
-        poster: 'https://via.placeholder.com/170x250',
+        poster: null,
         genre: 'Science-fiction',
         ratings: [5, 5, 5, 5]
     }

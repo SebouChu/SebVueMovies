@@ -144,6 +144,20 @@ var myStore = new Vuex.Store({
                         reject();
                     })
             })
+        },
+
+        searchPosterInAPI(context, title) {
+            return new Promise((resolve, reject) => {
+                axios.get(`/api/omdb?title=${title}`)
+                    .then(response => {
+                        resolve(response.data);
+                    })
+                    .catch(error => {
+                        if (error.response) {
+                            resolve(error.response.data);
+                        }
+                    })
+            })
         }
     }
 });
