@@ -3,6 +3,7 @@ var multer = require('multer');
 var axios = require('axios');
 var crypto = require('crypto');
 var path = require('path');
+require('dotenv').config();
 
 var apiRoutes = express.Router();
 
@@ -110,7 +111,7 @@ apiRoutes.route('/movies/:id/rate').post(function (req, res, next) {
 apiRoutes.route('/omdb').get(function (req, res, next) {
     var movieTitle = req.query.title;
     var paramTitle = movieTitle.replace(' ', '+');
-    axios.get(`https://www.omdbapi.com/?apikey=OMDB_API_KEY&t=${paramTitle}`)
+    axios.get(`https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&t=${paramTitle}`)
         .then(response => {
             if (response.data['Poster'] !== undefined) {
                 res.status(200).send({ poster_url: response.data['Poster'] });
