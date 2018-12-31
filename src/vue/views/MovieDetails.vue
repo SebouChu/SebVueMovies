@@ -43,10 +43,13 @@
       </div>
     </div>
     <hr>
-    <div class="mb-4" v-if="!hasRated">
+    <div class="mb-4">
       <h5>Donnez votre note : </h5>
-      <star-rating :show-rating="false" v-model="userRating" class="mt-3 mb-4"></star-rating>
-      <button class="btn btn-primary" v-on:click="sendRating()">Noter</button>
+      <div v-if="!hasRated">
+        <star-rating :show-rating="false" v-model="userRating" class="mt-3 mb-4"></star-rating>
+        <button class="btn btn-primary" v-on:click="sendRating()">Noter</button>
+      </div>
+      <p class="mt-3" v-if="hasRated">Merci pour votre vote !</p>
     </div>
     <p><router-link :to="{ name: 'home' }">Retour</router-link></p>
   </div>
