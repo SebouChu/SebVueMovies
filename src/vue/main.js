@@ -169,5 +169,9 @@ const app = new Vue({
     render: h => h(App),
     mounted() {
         this.$store.dispatch('getMoviesFromAPI');
+        
+        if (this.$route.params.id !== undefined) {
+            this.$store.dispatch('getMovieFromAPI', this.$route.params.id);
+        }
     }
 });

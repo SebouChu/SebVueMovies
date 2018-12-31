@@ -48,12 +48,12 @@
         <span v-if="searching" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         Rechercher sur OMDb
       </button>
-      <button type="button" class="btn btn-danger d-block mt-3" v-if="movie.poster" v-on:click="movie.poster = null">Delete</button>
+      <button type="button" class="btn btn-danger d-block mt-3" v-if="movie.poster" v-on:click="movie.poster = null">Supprimer</button>
     </div>
 
     <div class="form-group col-lg-6" v-if="movie.poster || preview">
-      <p>Current :</p>
-      <img :src="movie.poster ||  preview" alt="Current poster" class="img-fluid">
+      <p>Poster actuel :</p>
+      <img :src="movie.poster ||  preview" alt="Poster actuel" class="img-fluid">
     </div>
   </div>
 
