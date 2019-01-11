@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 
 const open = require('opn');
 
-var port = 8080;
+var port = process.env.PORT || 8080;
 
 global.MOVIES = [
     {
@@ -76,6 +76,8 @@ app.get('/', function (req, res, next) {
     res.sendFile(path.resolve('src/dist/index.html'));
 });
 
-open(`http://localhost:${port}`).catch(() => {
-  log.warn(`Failed to open browser automatically.`);
-});
+if (process.env.NODE_ENV == "development") {
+    open(`http://localhost:${port}`).catch(() => {
+      log.warn(`Failed to open browser automatically.`);
+    });
+}
