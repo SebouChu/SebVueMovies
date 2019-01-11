@@ -23,8 +23,25 @@
     </div>
   </div>
 
+  <div class="row mt-3 mb-4">
+    <div class="col-lg-5">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="search_attribute">Type</label>
+        </div>
+        <select class="custom-select" v-model="search.attribute" id="search_attribute">
+          <option value="title">Titre</option>
+          <option value="year">Année</option>
+          <option value="director_name">Nom du réalisateur</option>
+          <option value="genre">Genre</option>
+        </select>
+        <input type="text" class="form-control" placeholder="Recherche..." aria-label="Recherche" v-model="search.value" id="search_value">
+      </div>
+    </div>
+  </div>
+
   <div class="row mt-4">
-    <div class="col-lg-4 col-md-6 mb-4" v-for="(movie, index) in movies">
+    <div class="col-lg-4 col-md-6 mb-4" v-for="(movie, index) in displayedMovies">
       <movie-card v-bind:movie="movie"></movie-card>
     </div>
   </div>
@@ -50,6 +67,10 @@ export default {
       },
       newPoster: {
         file: null
+      },
+      search: {
+        attribute: 'title',
+        value: ''
       }
     }
   },
@@ -85,7 +106,25 @@ export default {
   computed: {
     movies() {
       return this.$store.state.movies;
+    },
+    searchedMovies() {
+      var searchAttributes = this.search.attribute.split('_');
+      return this.movies.filter(movie => {
+        var digger = movie;
+        searchAttributes.forEach(attr => { digger = digger[attr] });
+
+        return digger.toString().toLowerCase().indexOf(this.search.value.toLowerCase()) !== -1;
+      });
+    },
+    displayedMovies() {
+      return (this.search.value !== '') ? this.searchedMovies : this.movies;
     }
   }
 }
 </script>
+
+<style media="screen">
+  input#search_value {
+    flex-grow: 3;
+  }
+</style>
