@@ -2,7 +2,9 @@ var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 
-const open = require('opn');
+if (process.env.NODE_ENV === "development") {
+    const open = require('opn');
+}
 
 var port = process.env.PORT || 8080;
 
@@ -76,7 +78,7 @@ app.get('/', function (req, res, next) {
     res.sendFile(path.resolve('src/dist/index.html'));
 });
 
-if (process.env.NODE_ENV == "development") {
+if (process.env.NODE_ENV === "development") {
     open(`http://localhost:${port}`).catch(() => {
       log.warn(`Failed to open browser automatically.`);
     });
