@@ -37,21 +37,21 @@ var myStore = new Vuex.Store({
         },
 
         updateMovie(state, movie) {
-            var index = state.movies.findIndex(storedMovie => storedMovie.id == movie.id);
+            var index = state.movies.findIndex(storedMovie => storedMovie._id == movie._id);
             if (index !== -1) {
                 state.movies[index] = movie;
             }
         },
 
         deleteMovie(state, id) {
-            var index = state.movies.findIndex(movie => movie.id == id);
+            var index = state.movies.findIndex(movie => movie._id == id);
             if (index !== -1) {
                 state.movies.splice(index, 1);
             }
         },
 
         rateMovie(state, params) {
-            var index = state.movies.findIndex(movie => movie.id == params.id);
+            var index = state.movies.findIndex(movie => movie._id == params.id);
             if (index !== -1) {
                 state.movies[index].ratings.push(params.rating);
             }
@@ -80,7 +80,7 @@ var myStore = new Vuex.Store({
                     .then(response => {
                         if (response.status === 200) {
                             context.commit('addMovie', response.data);
-                            resolve(response.data.id);
+                            resolve(response.data._id);
                         } else {
                             reject();
                         }
@@ -97,7 +97,7 @@ var myStore = new Vuex.Store({
                 formData.append('movie', JSON.stringify(params.movie));
                 formData.append('posterFile', params.posterFile);
 
-                axios.post(`/api/movies/${params.movie.id}`, formData)
+                axios.post(`/api/movies/${params.movie._id}`, formData)
                     .then(response => {
                         if (response.status === 200) {
                             context.commit('updateMovie', response.data);
@@ -169,7 +169,7 @@ const app = new Vue({
     render: h => h(App),
     mounted() {
         this.$store.dispatch('getMoviesFromAPI');
-        
+
         if (this.$route.params.id !== undefined) {
             this.$store.dispatch('getMovieFromAPI', this.$route.params.id);
         }

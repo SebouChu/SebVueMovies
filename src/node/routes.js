@@ -5,6 +5,9 @@ var crypto = require('crypto');
 var path = require('path');
 require('dotenv').config();
 
+var mongodb = require('mongodb');
+var ObjectID = mongodb.ObjectID;
+
 var apiRoutes = express.Router();
 
 var storage = multer.diskStorage({
@@ -34,78 +37,182 @@ var upload = multer({
 });
 
 apiRoutes.route('/movies').get(function (req, res, next) {
-    res.json(MOVIES);
+    var dbo = global.DB_CLIENT.db(global.DB_NAME);
+
+    dbo.collection('movies').aggregate([
+        {
+            $lookup: {
+                from: 'ratings',
+                localField: '_id',
+                foreignField: 'movie_id',
+                as: 'rawRatings'
+            }
+        },
+        {
+            $addFields: {
+                ratings: {
+                    $map: {
+                        input: '$rawRatings',
+                        as: 'rawRating',
+                        in: '$$rawRating.rating'
+                    }
+                }
+            }
+        },
+        {
+            $project: { rawRatings: 0 }
+        }
+    ]).toArray(function (err, movies) {
+        if (err) throw err;
+
+        res.json(movies);
+    });
 });
 
 apiRoutes.route('/movies').post(upload.single('posterFile'), function (req, res) {
+    var dbo = global.DB_CLIENT.db(global.DB_NAME);
+
     var newMovie = JSON.parse(req.body.movie);
-    newMovie.id = MOVIES[MOVIES.length - 1].id + 1;
     newMovie.year = parseInt(newMovie.year);
     if (req.file !== undefined) {
         newMovie.poster = `uploads/${req.file.filename}`;
     }
 
-    MOVIES.push(newMovie);
-    res.json(newMovie);
+    dbo.collection('movies').insertOne(newMovie, function (err, insertRes) {
+        if (err) {
+            throw err;
+        }
+
+        var returnedMovie = insertRes.ops[0];
+        returnedMovie.ratings = []; // New record has no ratings
+
+        res.json(returnedMovie);
+    });
 });
 
 apiRoutes.route('/movies/:id').get(function (req, res, next) {
-    var movie = MOVIES.find(movie => movie.id == req.params.id)
+    var dbo = global.DB_CLIENT.db(global.DB_NAME);
 
-    if (movie === null) {
-        res.status(404).send({ error: 'Movie not found.' });
-    } else {
-        res.json(movie);
-    }
+    dbo.collection('movies').aggregate([
+        {
+          $match: { _id: ObjectID(req.params.id) }
+        },
+        {
+          $lookup: {
+              from: 'ratings',
+              localField: '_id',
+              foreignField: 'movie_id',
+              as: 'rawRatings'
+          }
+        },
+        {
+          $addFields: {
+              ratings: {
+                  $map: {
+                      input: '$rawRatings',
+                      as: 'rawRating',
+                      in: '$$rawRating.rating'
+                  }
+              }
+          }
+        },
+        {
+          $project: { rawRatings: 0 }
+        },
+    ]).next(function (err, movie) {
+        if (err) throw err;
+
+        if (movie === null) {
+            res.status(404).send({ error: 'Movie not found.' });
+        } else {
+            res.json(movie);
+        }
+    });
 });
 
 apiRoutes.route('/movies/:id').post(upload.single('posterFile'), function (req, res, next) {
-    var movie = MOVIES.find(movie => movie.id == req.params.id)
+    var dbo = global.DB_CLIENT.db(global.DB_NAME);
 
-    if (movie === null) {
-        res.status(404).send({ error: 'Movie not found.' });
-    } else {
-        var updatedMovie = JSON.parse(req.body.movie);
+    dbo.collection('movies').findOne({ _id: ObjectID(req.params.id) }, function (err, movie) {
+        if (err) throw err;
 
-        movie.title = `${updatedMovie.title}`;
-        movie.year = parseInt(updatedMovie.year);
-        movie.language = `${updatedMovie.language}`;
-        movie.director.name = `${updatedMovie.director.name}`;
-        movie.director.nationality = `${updatedMovie.director.nationality}`;
-        movie.director.birthdate = `${updatedMovie.director.birthdate}`;
-        movie.genre = `${updatedMovie.genre}`;
-        movie.poster = updatedMovie.poster;
+        if (movie === null) {
+            res.status(404).send({ error: 'Movie not found.' });
+        } else {
+            var updatedMovie = JSON.parse(req.body.movie);
 
-        if (req.file !== undefined) {
-            movie.poster = `uploads/${req.file.filename}`;
+            delete updatedMovie._id;
+            delete updatedMovie.ratings;
+            updatedMovie.year = parseInt(updatedMovie.year);
+            if (req.file !== undefined) {
+                updatedMovie.poster = `uploads/${req.file.filename}`;
+            }
+
+            dbo.collection('movies').updateOne({ _id: ObjectID(req.params.id) }, { $set: updatedMovie }, function (err, updateRes) {
+                if (err) throw err;
+
+                dbo.collection('movies').aggregate([
+                    { $match: { _id: ObjectID(req.params.id) } },
+                    {
+                      $lookup: {
+                          from: 'ratings',
+                          localField: '_id',
+                          foreignField: 'movie_id',
+                          as: 'rawRatings'
+                      }
+                    },
+                    {
+                      $addFields: {
+                          ratings: {
+                              $map: {
+                                  input: '$rawRatings',
+                                  as: 'rawRating',
+                                  in: '$$rawRating.rating'
+                              }
+                          }
+                      }
+                    },
+                    { $project: { rawRatings: 0 } },
+                ]).next(function (err, movie) {
+                    if (err) throw err;
+
+                    res.json(movie);
+                });
+            });
         }
-
-        res.json(movie);
-    }
+    });
 });
 
 apiRoutes.route('/movies/:id/delete').get(function (req, res, next) {
-    var movieIndex = MOVIES.findIndex(movie => movie.id == req.params.id)
+    var dbo = global.DB_CLIENT.db(global.DB_NAME);
 
-    if (movieIndex === -1) {
-        res.status(404).send({ error: 'Movie not found.' });
-    } else {
-        MOVIES.splice(movieIndex, 1);
+    dbo.collection('movies').deleteOne({ _id: ObjectID(req.params.id) }, function (err, deleteRes) {
+        if (err) throw err;
 
-        res.status(204).send(null);
-    }
+        if (deleteRes.deletedCount !== 1) {
+            res.status(404).send({ error: 'Movie not found.' });
+        } else {
+            res.status(204).send(null);
+        }
+    });
 });
 
 apiRoutes.route('/movies/:id/rate').post(function (req, res, next) {
-    var movie = MOVIES.find(movie => movie.id == req.params.id)
+    var dbo = global.DB_CLIENT.db(global.DB_NAME);
 
-    if (movie === null) {
-        res.status(404).send({ error: 'Movie not found.' });
-    } else {
-        movie.ratings.push(req.body.rating);
+    dbo.collection('movies').findOne({ _id: ObjectID(req.params.id) }, function (err, movie) {
+        if (err) throw err;
 
-        res.status(204).send(null);
-    }
+        if (movie === null) {
+            res.status(404).send({ error: 'Movie not found.' });
+        } else {
+            dbo.collection('ratings').insertOne({ movie_id: movie._id, rating: req.body.rating }, function (err, insertRes) {
+                if (err) throw err;
+
+                res.status(204).send(null);
+            });
+        }
+    });
 });
 
 apiRoutes.route('/omdb').get(function (req, res, next) {

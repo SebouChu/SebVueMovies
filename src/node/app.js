@@ -1,12 +1,25 @@
+require('dotenv').config();
+
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
+var MongoClient = require('mongodb').MongoClient;
 
-if (process.env.NODE_ENV === "development") {
-    const open = require('opn');
+if (process.env.NODE_ENV !== "production") {
+    var open = require('opn');
 }
 
 var port = process.env.PORT || 8080;
+
+global.DB_CLIENT = null;
+global.DB_NAME = process.env.MONGODB_DBNAME;
+MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true }, function (err, client) {
+    if (err) throw err;
+
+    console.log("Successfully connected to MongoDB. Let's begin.");
+
+    global.DB_CLIENT = client;
+});
 
 global.MOVIES = [
     {
@@ -78,7 +91,7 @@ app.get('/', function (req, res, next) {
     res.sendFile(path.resolve('src/dist/index.html'));
 });
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV !== "production") {
     open(`http://localhost:${port}`).catch(() => {
       log.warn(`Failed to open browser automatically.`);
     });

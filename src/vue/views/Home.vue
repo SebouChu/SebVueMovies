@@ -32,7 +32,7 @@
         <select class="custom-select" v-model="search.attribute" id="search_attribute">
           <option value="title">Titre</option>
           <option value="year">Année</option>
-          <option value="director_name">Nom du réalisateur</option>
+          <option value="director_name">Réalisateur</option>
           <option value="genre">Genre</option>
         </select>
         <input type="text" class="form-control" placeholder="Recherche..." aria-label="Recherche" v-model="search.value" id="search_value">
@@ -62,8 +62,7 @@ export default {
             birthdate: ''
         },
         poster: null,
-        genre: '',
-        ratings: []
+        genre: ''
       },
       newPoster: {
         file: null
@@ -87,8 +86,7 @@ export default {
             birthdate: ''
         },
         poster: null,
-        genre: '',
-        ratings: []
+        genre: ''
       };
       this.newPoster = {
         file: null

@@ -12,8 +12,8 @@
       <div class="col-lg-9 mt-3 mb-3">
         <h3>{{ movie.title }}</h3>
         <div class="actions">
-          <button type="button" class="btn btn-warning" v-on:click="$router.push({ name: 'edit_movie', params: { id: movie.id } })">Modifier</button>
-          <button type="button" class="btn btn-danger" v-on:click="deleteMovie(movie.id)">Supprimer</button>
+          <button type="button" class="btn btn-warning" v-on:click="$router.push({ name: 'edit_movie', params: { id: movie._id } })">Modifier</button>
+          <button type="button" class="btn btn-danger" v-on:click="deleteMovie()">Supprimer</button>
         </div>
       </div>
     </div>
@@ -92,9 +92,9 @@ export default {
     '$route': 'fetchMovie'
   },
   methods: {
-    deleteMovie(id) {
+    deleteMovie() {
       if (confirm("Voulez-vous vraiment supprimer ce film ?")) {
-        this.$store.dispatch('deleteMovieInAPI', this.id).then(() => {
+        this.$store.dispatch('deleteMovieInAPI', this.movie._id).then(() => {
           this.$router.push({ name: 'home' });
         });
       }
@@ -105,10 +105,10 @@ export default {
     },
 
     sendRating() {
-      this.$store.dispatch('rateMovieInAPI', { id: this.id, rating: this.userRating }).then(() => {
+      this.$store.dispatch('rateMovieInAPI', { id: this.movie._id, rating: this.userRating }).then(() => {
         // TODO: Success Alert
         this.hasRated = true;
-        this.$store.dispatch('getMovieFromAPI', this.$route.params.id);
+        this.$store.dispatch('getMovieFromAPI', this.movie._id);
       }).catch(() => {
         // TODO: Error Alert
       });

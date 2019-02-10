@@ -7,7 +7,7 @@
   </div>
   <div class="card-footer bg-white d-flex align-items-center justify-content-between">
     <small class="float-left text-muted">Note : {{ movieRate }} / 5 ({{ movie.ratings.length }} votes)</small>
-    <router-link :to="{ name: 'movie', params: { id: movie.id } }" class="float-right card-link">En savoir plus</router-link>
+    <router-link :to="{ name: 'movie', params: { id: movie._id } }" class="float-right card-link">En savoir plus</router-link>
   </div>
 </div>
 </template>
