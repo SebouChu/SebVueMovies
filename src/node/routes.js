@@ -36,6 +36,7 @@ var upload = multer({
     }
 });
 
+// Get all movies with ratings
 apiRoutes.route('/movies').get(function (req, res, next) {
     var dbo = global.DB_CLIENT.db(global.DB_NAME);
 
@@ -69,6 +70,7 @@ apiRoutes.route('/movies').get(function (req, res, next) {
     });
 });
 
+// Create movie
 apiRoutes.route('/movies').post(upload.single('posterFile'), function (req, res) {
     var dbo = global.DB_CLIENT.db(global.DB_NAME);
 
@@ -90,6 +92,7 @@ apiRoutes.route('/movies').post(upload.single('posterFile'), function (req, res)
     });
 });
 
+// Get movie with id
 apiRoutes.route('/movies/:id').get(function (req, res, next) {
     var dbo = global.DB_CLIENT.db(global.DB_NAME);
 
@@ -130,6 +133,7 @@ apiRoutes.route('/movies/:id').get(function (req, res, next) {
     });
 });
 
+// Update movie with id
 apiRoutes.route('/movies/:id').post(upload.single('posterFile'), function (req, res, next) {
     var dbo = global.DB_CLIENT.db(global.DB_NAME);
 
@@ -183,6 +187,7 @@ apiRoutes.route('/movies/:id').post(upload.single('posterFile'), function (req, 
     });
 });
 
+// Delete movie with id
 apiRoutes.route('/movies/:id/delete').get(function (req, res, next) {
     var dbo = global.DB_CLIENT.db(global.DB_NAME);
 
@@ -197,6 +202,7 @@ apiRoutes.route('/movies/:id/delete').get(function (req, res, next) {
     });
 });
 
+// Rate movie with id
 apiRoutes.route('/movies/:id/rate').post(function (req, res, next) {
     var dbo = global.DB_CLIENT.db(global.DB_NAME);
 
@@ -215,6 +221,7 @@ apiRoutes.route('/movies/:id/rate').post(function (req, res, next) {
     });
 });
 
+// Get poster from OMDb
 apiRoutes.route('/omdb').get(function (req, res, next) {
     var movieTitle = req.query.title;
     var paramTitle = movieTitle.replace(' ', '+');
