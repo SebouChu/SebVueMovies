@@ -21,6 +21,15 @@ Les films et les notes sont stockés dans une base de données MongoDB.
   - [macOS](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/)
   - [Linux](https://docs.mongodb.com/manual/administration/install-on-linux/)
 
+### Démarrage
+
+    $ mkdir -p /data/db
+    $ mongod
+
+### Import du dump
+
+    $ mongorestore -h localhost:27017 -d svm-db dump/svm-db
+
 ## Configuration
 
 Pour la configuration des variables d'environnement du `.env`, reportez-vous au fichier d'exemple [`.env.example`](https://github.com/SebouChu/SebVueMovies/blob/master/.env.example).
