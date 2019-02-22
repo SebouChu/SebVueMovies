@@ -3,7 +3,7 @@
 https://sebvuemovies.herokuapp.com
 
 
-Application Node.JS + VueJS à base de films, réalisée dans le cadre du module "JS Avancé" en LP DAWIN.
+Application Node.JS + VueJS + MongoDB à base de films, réalisée dans le cadre du module "JS Avancé" en LP DAWIN.
 
 ## OMDb
 
@@ -32,4 +32,23 @@ Les films et les notes sont stockés dans une base de données MongoDB.
 
 ## Configuration
 
+    $ npm install
+
 Pour la configuration des variables d'environnement du `.env`, reportez-vous au fichier d'exemple [`.env.example`](https://github.com/SebouChu/SebVueMovies/blob/master/.env.example).
+
+## Démarrage
+
+- Terminal 1
+  ```
+  $ mongod
+  ```
+
+- Terminal 2
+  ```
+  $ node_modules/.bin/webpack --progress --hide-modules --watch
+  ```
+
+- Terminal 3
+  ```
+  $ node src/node/app.js
+  ```
