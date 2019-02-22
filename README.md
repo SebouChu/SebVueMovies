@@ -1,7 +1,7 @@
 # SebVueMovies
 
 https://sebvuemovies.herokuapp.com
-
+Sébastien Gaya / sebastien.gaya@etu.u-bordeaux.fr
 
 Application Node.JS + VueJS + MongoDB à base de films, réalisée dans le cadre du module "JS Avancé" en LP DAWIN.
 
