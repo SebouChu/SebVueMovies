@@ -74,10 +74,7 @@ if (process.env.NODE_ENV === 'production') {
     module.exports.optimization = {
         minimizer: [
             new UglifyJsPlugin({
-                sourceMap: true,
-                compress: {
-                    warnings: false
-                }
+                sourceMap: true
             })
         ]
     }
