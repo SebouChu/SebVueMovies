@@ -1,5 +1,6 @@
 var express = require('express');
 var multer = require('multer');
+var multerStorage = require('./multer-storage.js');
 var axios = require('axios');
 var crypto = require('crypto');
 var path = require('path');
@@ -10,19 +11,8 @@ var ObjectID = mongodb.ObjectID;
 
 var apiRoutes = express.Router();
 
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './src/static/uploads/')
-    },
-    filename: function (req, file, cb) {
-        crypto.pseudoRandomBytes(16, function (err, raw) {
-            cb(null, raw.toString('hex') + path.extname(file.originalname));
-        });
-    }
-});
-
 var upload = multer({
-    storage: storage,
+    storage: multerStorage,
     fileFilter: function (req, file, cb) {
         var filetypes = /jpeg|jpg|png/;
         var mimetype = filetypes.test(file.mimetype);
@@ -77,7 +67,8 @@ apiRoutes.route('/movies').post(upload.single('posterFile'), function (req, res)
     var newMovie = JSON.parse(req.body.movie);
     newMovie.year = parseInt(newMovie.year);
     if (req.file !== undefined) {
-        newMovie.poster = `uploads/${req.file.filename}`;
+        newMovie.poster = process.env.NODE_ENV === "production" ? req.file.location
+                                                                : `uploads/${req.file.filename}`;
     }
 
     dbo.collection('movies').insertOne(newMovie, function (err, insertRes) {
@@ -149,7 +140,8 @@ apiRoutes.route('/movies/:id').post(upload.single('posterFile'), function (req, 
             delete updatedMovie.ratings;
             updatedMovie.year = parseInt(updatedMovie.year);
             if (req.file !== undefined) {
-                updatedMovie.poster = `uploads/${req.file.filename}`;
+                updatedMovie.poster = process.env.NODE_ENV === "production" ? req.file.location
+                                                                            : `uploads/${req.file.filename}`;
             }
 
             dbo.collection('movies').updateOne({ _id: ObjectID(req.params.id) }, { $set: updatedMovie }, function (err, updateRes) {
