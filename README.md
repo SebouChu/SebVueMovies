@@ -40,7 +40,7 @@ Pour la configuration des variables d'environnement du `.env`, reportez-vous au 
 
 - Terminal 1
   ```
-  $ mongod
+  $ mongod --dbpath data/db
   ```
 
 - Terminal 2

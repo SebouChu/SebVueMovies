@@ -1,7 +1,7 @@
 var path = require('path')
 var webpack = require('webpack')
+const TerserPlugin = require('terser-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
     mode: 'development',
@@ -65,10 +65,8 @@ module.exports = {
 if (process.env.NODE_ENV === 'production') {
     module.exports.mode = 'production'
     module.exports.devtool = '#source-map'
-    // http://vue-loader.vuejs.org/en/workflow/production.html
-    module.exports.plugins = (module.exports.plugins || []).concat([
-        new webpack.LoaderOptionsPlugin({
-            minimize: true
-        })
-    ])
+    module.exports.optimization = {
+        minimize: true,
+        minimizer: [new TerserPlugin()]
+    }
 }
