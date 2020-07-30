@@ -23,8 +23,8 @@ Les films et les notes sont stockés dans une base de données MongoDB.
 
 ### Démarrage
 
-    $ mkdir -p /data/db
-    $ mongod
+    $ mkdir -p data/db
+    $ mongod --dbpath data/db
 
 ### Import du dump
 
