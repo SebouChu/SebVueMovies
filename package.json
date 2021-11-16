@@ -19,7 +19,7 @@
   "homepage": "https://github.com/SebouChu/SebVueMovies#readme",
   "dependencies": {
     "@babel/core": "^7.2.0",
-    "aws-sdk": "^2.444.0",
+    "aws-sdk": "^2.814.0",
     "axios": "^0.18.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.4",
